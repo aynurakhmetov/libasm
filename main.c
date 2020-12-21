@@ -11,118 +11,176 @@
 /* ************************************************************************** */
 
 #include "libasm.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <sys/errno.h>
-#include <unistd.h>
-#include <fcntl.h>
-#define FBLACK      "\033[30;"
-#define FRED        "\033[31;"
-#define FGREEN      "\033[32"
-#define FYELLOW     "\033[33;"
-#define FBLUE       "\033[34;"
-#define FPURPLE     "\033[35;"
-#define D_FGREEN    "\033[6;"
-#define FWHITE      "\033[7;"
-#define FCYAN       "\x1b[36m"
-#define W       	"m"
-#define BBLACK      "40m"
-#define BRED        "41m"
-#define BGREEN      "42m"
-#define BYELLOW     "43m"
-#define BBLUE       "44m"
-#define BPURPLE     "45m"
-#define D_BGREEN    "46m"
-#define BWHITE      "47m"
-#define NONEL        "\033[0m\n"
-#define NONE        "\033[0m"
 
 int main()
 {
-	char s[]="12345678";
-	char s1[100];
+	char s[]="123456781234567812345678123456781234567812345678123456781234567812345678123456781234567812345678123456781234567812345678";
+	char s1[10000];
 	char *s2;
-	char *s3, *s4;
-	int k, l;
-
-	s3 = "";
-	s4 = "";
-	
 
 	printf("\n");
 
 	// ft_strlen
 	printf(FBLUE BWHITE"=====TEST ft_strlen:====="NONEL);
+	// Try ft_strlen with an empty string
+	printf(FGREEN W"Original  = "NONE);
+    printf("%ld\n", strlen(""));
+	printf("My        = ");
+    printf("%ld\n", ft_strlen(""));
+	// Try ft_strlen with a very long string
 	printf(FGREEN W"Original  = "NONE);
     printf("%ld\n", strlen(s));
 	printf("My        = ");
     printf("%ld\n", ft_strlen(s));
-	printf(FGREEN W"Original  = "NONE);
-    printf("%ld\n", strlen(""));
-	printf("My      = ");
-    printf("%ld\n", ft_strlen(""));
-	printf("\n");
-
-	//ft_strcpy
+	
+	// ft_strcpy
 	printf(FBLUE BWHITE"=====TEST ft_strcpy:====="NONEL);
-	printf(FGREEN W"Original  = "NONE);
-    printf("%s\n", strcpy(s1, s));
-	printf("My        = ");
-    printf("%s\n", ft_strcpy(s1, s));
+	// Try ft_strcpy with an empty string
 	printf(FGREEN W"Original  = "NONE);
     printf("%s\n", strcpy(s1, ""));
 	printf("My        = ");
     printf("%s\n", ft_strcpy(s1, ""));
+	// Try ft_strcpy with a very long string
 	printf(FGREEN W"Original  = "NONE);
-    printf("%s\n", strcpy(s1, "0987654321"));
+    printf("%s\n", strcpy(s1, s));
 	printf("My        = ");
-    printf("%s\n", ft_strcpy(s1, "0987654321"));
-	printf("\n");
+    printf("%s\n", ft_strcpy(s1, s));
 
 	// ft_strcmp
-	k = ft_strcmp(s3, s4);
-	l = strcmp(s3, s4);
 	printf(FBLUE BWHITE"=====TEST ft_strcmp:====="NONEL);
-	printf(FGREEN W"Original  = "NONE);
-    printf("%d\n", strcmp(s, ""));
-	printf("My        = ");
-    printf("%d\n", ft_strcmp(s, ""));
+	// Try ft_strcmp with 2 empty strings
 	printf(FGREEN W"Original  = "NONE);
     printf("%d\n", strcmp("", ""));
 	printf("My        = ");
     printf("%d\n", ft_strcmp("", ""));
+	// Try ft_strcmp with 1 empty string as first argument
 	printf(FGREEN W"Original  = "NONE);
     printf("%d\n", strcmp("", s));
 	printf("My        = ");
     printf("%d\n", ft_strcmp("", s));
+	// Try ft_strcmp with 1 empty string as second argument
+	printf(FGREEN W"Original  = "NONE);
+    printf("%d\n", strcmp(s, ""));
+	printf("My        = ");
+    printf("%d\n", ft_strcmp(s, ""));
+	// Try ft_strcmp with multiple strings, equal or not, think about switching them
 	printf(FGREEN W"Original  = "NONE);
     printf("%d\n", strcmp(s, s));
 	printf("My        = ");
     printf("%d\n", ft_strcmp(s, s));
+
+	// ft_write
+	// Try ft_write with the stdout
+	printf(FBLUE BWHITE"=====TEST ft_write:====="NONEL);
+	printf(FGREEN W"Original  = "NONEL);
+	errno = 0;
+	printf(" %ld, %d\n", write(1, s, strlen(s)), errno);
+	printf("My        = \n");
+	errno = 0;
+	printf(" %ld, %d\n", ft_write(1, s, strlen(s)), errno);
+	// Try ft_write with an open file descriptor
+	int fd = open("file", O_WRONLY);
+	printf(FGREEN W"Original  = \n"NONE);
+	errno = 0;
+	//printf("%ld, %d\n", write(fd, s, strlen(s)), errno);
+	printf("My        = \n");
+	errno = 0;
+	printf("%ld, %d\n", ft_write(fd, s, strlen(s)), errno);
+	close(fd);
+	// Try ft_write with a wrong file descriptor
+	printf(FGREEN W"Original  = \n"NONE);
+	errno = 0;
+	printf("%ld, %d\n", write(-1, s, strlen(s)), errno);
+	printf("My        = \n");
+	errno = 0;
+	printf("%ld, %d\n", ft_write(-1, s, strlen(s)), errno);
+	printf(FGREEN W"Original  = \n"NONE);
+	errno = 0;
+	printf("%ld, %d\n", write(0, NULL, strlen(s)), errno);
+	printf("My        = \n");
+	errno = 0;
+	printf("%ld, %d\n", ft_write(0, NULL, strlen(s)), errno);
+	printf(FGREEN W"Original  = \n"NONE);
+	errno = 0;
+	printf("%ld, %d\n", write(0, s, -1), errno);
+	printf("My        = \n");
+	errno = 0;
+	printf("%ld, %d\n", ft_write(0, s, -1), errno);
 	printf("\n");
 
+	// ft_read
+	char s10[5];
+	printf(FBLUE BWHITE"=====TEST ft_read:====="NONEL);
+	// Try ft_read with the stdin
+	printf(FGREEN W"Original  = "NONEL);
+	errno = 0;
+	printf("%ld, %s, %d\n", read(0, s10, 100), s10, errno);
+	printf("My        = \n");
+	errno = 0;
+	printf("%ld, %s, %d\n", ft_read(0, s10, 100), s10, errno);
+	// Try ft_read with an open file descriptor
+	printf(FGREEN W"Original  = \n"NONE);
+	char *s11;
+	s11 = malloc(5);
+	fd = open("file", O_RDONLY);
+	errno = 0;
+	printf("%ld, %s, %d\n", read(fd, s11, 5), s11, errno);
+	close(fd);
+	printf("My        = \n");
+	fd = open("file", O_RDONLY);
+	errno = 0;
+	printf("%ld, %s, %d\n", ft_read(fd, s11, 5), s11, errno);
+	close(fd);
+	// Try ft_read with a wrong file descriptor
+	printf(FGREEN W"Original  = \n"NONE);
+	errno = 0;
+	printf("%ld, %s, %d\n", read(-1, s1, 10), s1, errno);
+	printf("My        = \n");
+	errno = 0;
+	printf("%ld, %s, %d\n", ft_read(-1, s1, 10), s1, errno);
+	fd = open("file", O_RDONLY);
+	printf(FGREEN W"Original  = \n"NONE);
+	fd = open("file", O_RDONLY);
+	errno = 0;
+	printf("%ld, %s, %d\n", read(fd, NULL, 100), s1, errno);
+	close(fd);
+	printf("My        = \n");
+	fd = open("file", O_RDONLY);
+	errno = 0;
+	printf("%ld, %s, %d\n", ft_read(fd, NULL, 100), s1, errno);
+	close(fd);
+	printf(FGREEN W"Original  = \n"NONE);
+	fd = open("file", O_RDONLY);
+	errno = 0;
+	printf("%ld, %s, %d\n", read(fd, s1, -1), s1, errno);
+	close(fd);
+	printf("My        = \n");
+	fd = open("file", O_RDONLY);
+	errno = 0;
+	printf("%ld, %s, %d\n", ft_read(fd, s1, -1), s1, errno);
+	close(fd);
+	printf("\n");
+	
 	// ft_strdup
 	printf(FBLUE BWHITE"=====TEST ft_strdup:====="NONEL);
-	s2 = strdup(s);
-	printf(FGREEN W"Original  = "NONE);
-	printf("%s, len = %ld\n", s2, strlen(s2));
-	free(s2);
-	s2 = ft_strdup(s);
-	printf("My        = ");
-	printf("%s, len = %ld\n", s2, strlen(s2));
-	free(s2);
+	// Try ft_strdup with an empty string
 	s2 = strdup("");
 	printf(FGREEN W"Original  = "NONE);
 	printf("%s, len = %ld\n", s2, strlen(s2));
 	free(s2);
 	s2 = ft_strdup("");
 	printf("My        = ");
+	printf("%s, len = %ld\n", s2, ft_strlen(s2));
+	free(s2);
+	// Try ft_strdup with a very long string
+	s2 = strdup(s);
+	printf(FGREEN W"Original  = "NONE);
 	printf("%s, len = %ld\n", s2, strlen(s2));
 	free(s2);
-
-
+	s2 = ft_strdup(s);
+	printf("My        = ");
+	printf("%s, len = %ld\n", s2, ft_strlen(s2));
+	free(s2);
 	char str[]= "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In massa tempor nec feugiat. Viverra vitae congue eu consequat ac felis donec et odio. Iaculis nunc sed augue lacus. Lacus laoreet non curabitur gravida arcu ac. Sit amet aliquam id diam maecenas ultricies. Consequat interdum varius sit amet mattis vulputate enim nulla. Lorem sed risus ultricies tristique nulla aliquet. Non nisi est sit amet. Sollicitudin aliquam ultrices sagittis orci a. Eget lorem dolor sed viverra ipsum nunc. Elit ut aliquam purus sit amet luctus venenatis. Nulla pellentesque dignissim enim sit amet venenatis urna. Tellus orci ac auctor augue. Est placerat in egestas erat imperdiet sed euismod.\
 Commodo viverra maecenas accumsan lacus vel facilisis volutpat est. Sit amet massa vitae tortor condimentum lacinia quis vel eros. In nibh mauris cursus mattis. Lectus urna duis convallis convallis tellus id interdum. Blandit massa enim nec dui nunc mattis enim ut. Ullamcorper a lacus vestibulum sed arcu non odio. Convallis aenean et tortor at risus viverra adipiscing at. Sed egestas egestas fringilla phasellus. Lacus laoreet non curabitur gravida arcu ac tortor dignissim convallis. Id cursus metus aliquam eleifend. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Arcu bibendum at varius vel pharetra vel.\
 Volutpat diam ut venenatis tellus in metus vulputate eu scelerisque. Fermentum leo vel orci porta non pulvinar neque laoreet suspendisse. Viverra vitae congue eu consequat ac felis donec. Rhoncus mattis rhoncus urna neque viverra justo. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Viverra vitae congue eu consequat. Augue mauris augue neque gravida in fermentum. Diam vulputate ut pharetra sit amet aliquam. Amet est placerat in egestas erat imperdiet. Venenatis tellus in metus vulputate eu. Sed risus ultricies tristique nulla aliquet enim. Iaculis eu non diam phasellus vestibulum lorem sed risus.\
@@ -149,87 +207,9 @@ Sed risus ultricies tristique nulla aliquet. Vivamus arcu felis bibendum ut tris
 	free(s2);
 	s2 = ft_strdup(str);
 	printf(FBLACK BWHITE"My        = \n"NONE);
-	printf("%s\n"FRED BWHITE"len = "NONE"%ld\n", s2, strlen(s2));
+	printf("%s\n"FRED BWHITE"len = "NONE"%ld\n", s2, ft_strlen(s2));
 	free(s2);
 	printf("\n");
-
-	// ft_read
-	printf(FBLUE BWHITE"=====TEST ft_read:====="NONEL);
-	int fd = open("file", O_RDONLY);
-	printf(FGREEN W"Original  = \n"NONE);
-	fd = open("file", O_RDONLY);
-	errno = 0;
-	printf("%ld, %s, %d\n", read(fd, NULL, 100), s1, errno);
-	close(fd);
-	printf("My        = \n");
-	fd = open("file", O_RDONLY);
-	errno = 0;
-	printf("%ld, %s, %d\n", ft_read(fd, NULL, 100), s1, errno);
-	close(fd);
-	printf(FGREEN W"Original  = \n"NONE);
-	fd = open("file", O_RDONLY);
-	errno = 0;
-	printf("%ld, %s, %d\n", read(fd, s1, -1), s1, errno);
-	close(fd);
-	printf("My        = \n");
-	fd = open("file", O_RDONLY);
-	errno = 0;
-	printf("%ld, %s, %d\n", ft_read(fd, s1, -1), s1, errno);
-	close(fd);
-	printf(FGREEN W"Original  = \n"NONE);
-	fd = open("file", O_RDONLY);
-	errno = 0;
-	printf("%ld, %s, %d\n", read(-1, s1, 10), s1, errno);
-	close(fd);
-	printf("My        = \n");
-	fd = open("file", O_RDONLY);
-	errno = 0;
-	printf("%ld, %s, %d\n", ft_read(-1, s1, 10), s1, errno);
-	close(fd);
-	printf(FGREEN W"Original  = \n"NONE);
-	fd = open("file", O_RDONLY);
-	errno = 0;
-	printf("%ld, %s, %d\n", read(fd, s1, 100), s1, errno);
-	close(fd);
-	printf("My        = \n");
-	fd = open("file", O_RDONLY);
-	errno = 0;
-	printf("%ld, %s, %d\n", ft_read(fd, s1, 100), s1, errno);
-	close(fd);
-	printf("\n");
 	
-
-	
-	// ft_write
-	printf(FBLUE BWHITE"=====TEST ft_write:====="NONEL);
-	char buf[1000];
-	buf[999] = '\0';
-	ft_read(0, buf, 100);
-	printf("%s\n", buf);
-	printf("\n");
-	errno = 0;
-	printf("\n%ld, %d\n", write(0, s, strlen(s)), errno);
-	errno = 0;
-	printf("\n\033[31mft_write\033[0m=%ld, \033[31merrno\033[0m=%d\n", ft_write(0, s, strlen(s)), errno);
-
-	errno = 0;
-	printf("\n%ld, %d\n", write(-1, s, strlen(s)), errno);
-	errno = 0;
-	printf("\n\033[31mft_write\033[0m=%ld, \033[31merrno\033[0m=%d\n", ft_write(-1, s, strlen(s)), errno);
-
-	errno = 0;
-	printf("\n%ld, %d\n", write(0, NULL, strlen(s)), errno);
-	errno = 0;
-	printf("\n\033[31mft_write\033[0m=%ld, \033[31merrno\033[0m=%d\n", ft_write(0, NULL, strlen(s)), errno);
-
-	errno = 0;
-	printf("\n%ld, %d\n", write(0, s, -1), errno);
-	errno = 0;
-	printf("\n\033[31mft_write\033[0m=%ld, \033[31merrno\033[0m=%d\n", ft_write(0, s, -1), errno);
-
-				printf("-----\033[33mtest ft_read\033[0m-----\n");
-
-
 	return (0);
 }
-

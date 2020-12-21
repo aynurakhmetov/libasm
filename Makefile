@@ -18,35 +18,33 @@ GCC_COMPIL = gcc -Wall -Werror -Wextra
 NASM_COMPIL = nasm -f macho64
 
 FILES_O= $(FILES_S:.s=.o)
-MAIN_O = $(MAIN:.c=.o)
 
 all: $(NAME)
+	@touch file
 
 %.o: %.s
 	@$(NASM_COMPIL) $< -o $@
 	@echo "$@ ready"
-
-%.o: %.c
-	@$(GCC_COMPIL) -c $(MAIN)
 
 $(NAME): $(FILES_O)
 	@ar rcs $(NAME) $?
 	@ranlib $(NAME)
 	@echo "library .a ready"
 
-test: $(MAIN_O) $(NAME)
-	@$(GCC_COMPIL)  $^ -I ./libasm.h -o test
+test:
+	@$(GCC_COMPIL) main.c -L. -lasm -o test
 	@./test
 
 clean:
-	@rm -f $(FILES_O) $(MAIN_O)
+	@rm -f $(FILES_O)
 	@echo "O-files deleted"
 
 fclean: clean
 	@rm -f $(NAME)
-	@rm -r test
+	@rm -f test
+	@rm -f file
 	@echo "All files deleted"
 
 re: fclean all
 
-.PHONY: clean fclean all re
+.PHONY: clean fclean all re test

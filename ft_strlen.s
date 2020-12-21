@@ -6,6 +6,7 @@ _ft_strlen:
 
 while:
 	inc rax
-	cmp byte [rdi + rax], 0
+	cmp qword[rdi + rax], 0
 	jnz while
 	ret
+	
